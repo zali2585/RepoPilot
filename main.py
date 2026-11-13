@@ -4,12 +4,14 @@ from patch import propose_patch
 import argparse
 from checks import duplicate_reason
 from ollama import ResponseError
+from escalate import save_escalation
 
 MAX_PATCH_ATTEMPTS = 3
 
 parser = argparse.ArgumentParser()
 parser.add_argument("file", type=Path)
 parser.add_argument("--test-file", type=Path, required=True)
+parser.add_argument("--report-dir", type=Path, default=Path("reports"))
 args = parser.parse_args()
 
 passed, report = run_tests(args.test_file)
@@ -84,8 +86,18 @@ else:
             f"Attempt {entry['attempt']}:",
             "PASS" if entry["passed"] else "FAIL"
             )
-    if not infrastructure_failed and attempt_history and not attempt_history[-1]["passed"]:
-        print("All 3 patch attempts failed. Escalate to human review")
+    if not infrastructure_failed and len(attempt_history) == 3 and not any(entry["passed"] for entry in attempt_history):
+        report_path = save_escalation(
+            args.file,
+            args.test_file,
+            source,
+            test_source,
+            report,
+            attempt_history,
+            args.report_dir
+    )
+
+        print(f"Escalation report saved: {report_path}")
 
     
 

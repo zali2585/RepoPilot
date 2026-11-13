@@ -1,0 +1,16 @@
+# Virtual environment
+.venv/
+
+# Python-generated files
+__pycache__/
+*.pyc
+
+# Private environment variables
+.env
+.env.*
+
+# Generated escalation reports
+reports/
+
+# macOS files
+.DS_Store
