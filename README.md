@@ -4,31 +4,7 @@ A local AI-powered bug-fixing prototype that tests its own patches, learns from 
 RepoPilot explores a simple question: what happens when an AI code suggestion is treated as a hypothesis to test, rather than a fix to trust?
 
 Given a Python source file and a corresponding unit test, RepoPilot reproduces the failure, asks a locally running coding model to propose a correction, runs the tests against that candidate, and uses the results to guide up to three attempts. If no candidate passes, it saves a structured report for human review.
-How it works
-Python source + unit test
-          |
-          v
-    Run baseline tests
-          |
-     Tests failing?
-          |
-          v
-  Generate patch with Ollama <------+
-          |                         |
-          v                         |
-  Check syntax and duplicates       |
-          |                         |
-          v                         |
-  Temporarily apply candidate       |
-          |                         |
-          v                         |
-      Run unit tests                |
-          |                         |
-          +-- Fail: save feedback --+ (up to 3 attempts)
-          |
-          +-- Pass: report candidate success
-          |
-          +-- 3 failures: save JSON escalation report
+
 
 The original source file is restored after candidate validation.
 Design choices
@@ -66,7 +42,6 @@ demo/test_cart.py	Regression test specifying the expected subtotal
 
 
 Current scope and limitations
-This is an educational prototype, not an autonomous repository repair service.
 - The caller supplies the source and test-file paths; RepoPilot does not yet locate relevant files from a GitHub issue.
 - AST duplicate detection catches structurally identical proposals, not all behaviorally equivalent patches.
 - Passing tests only establishes correctness for the tested cases; it is not proof of a safe or complete fix.
