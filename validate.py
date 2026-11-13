@@ -4,7 +4,9 @@ import sys
 def run_tests(test_file):
     result = subprocess.run(
         [sys.executable, "-m", "unittest", "discover", 
-         "-s", "demo", "-p", test_file, "-v"],
+         "-s", str(test_file.parent), 
+         "-p", test_file, 
+         "-v"],
         capture_output=True,
         text=True,
     )
