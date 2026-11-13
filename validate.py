@@ -5,7 +5,7 @@ def run_tests(test_file):
     result = subprocess.run(
         [sys.executable, "-m", "unittest", "discover", 
          "-s", str(test_file.parent), 
-         "-p", test_file, 
+         "-p", test_file.name, 
          "-v"],
         capture_output=True,
         text=True,

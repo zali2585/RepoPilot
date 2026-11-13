@@ -25,7 +25,11 @@ else:
         candidate = propose_patch(source, test_source, report, attempt_history)
         try:
             args.file.write_text(candidate, encoding="utf-8")
+
+            print("Starting candidate validation")
             patch_passed, patch_report = run_tests(args.test_file)
+            print("Validation finished:", patch_passed)
+            print("Validation report:", patch_report)
         finally:
             args.file.write_text(source, encoding="utf-8")
         attempt_history.append({
@@ -38,6 +42,11 @@ else:
             print("Patch passed: ")
             print(patch_report)
             break
+    for entry in attempt_history:
+        print(
+            f"Attempt {entry['attempt']}:",
+            "PASS" if entry["passed"] else "FAIL"
+            )
     if not patch_passed:
         print("All 3 patch attempts failed. Escalate to human review")
 
