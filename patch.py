@@ -65,14 +65,5 @@ def propose_patch(source, test_file, baseline_report, attempt_history):
         raise ValueError("Model returned empty code")
 
     ast.parse(candidate)
-    original_tree = ast.dump(
-        ast.parse(source),
-        include_attributes=False
-    )
-    candidate_tree = ast.dump(
-        ast.parse(candidate),
-        include_attributes=False
-    )
-    if original_tree == candidate_tree:
-        raise ValueError("LLM returned structurally unchanged code")
+   
     return candidate
